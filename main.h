@@ -7,9 +7,9 @@
 
 char tab[9] = {'l', 'R', 'r', 'd', 't', 'a', 'A', 'L', '\0'};
 	
-void get_argument(int argc, char *argv[]);
+int get_argument(int argc, char *argv[]);
 void    my_putstr(char *str);
 void    my_put_nbr(int n);
-
+void my_putchar(char c);
 
 #endif
