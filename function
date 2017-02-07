@@ -1,0 +1,149 @@
+Opendir :
+La fonction opendir() ouvre un flux répertoire correspondant au répertoire name, et renvoie un pointeur sur ce flux. Le flux est positionné sur la première entrée du répertoire.
+#include <sys/types.h>
+#include <dirent.h>
+
+DIR *opendir(const char *name);
+
+
+
+Readdir :
+La fonction readdir() renvoie un pointeur sur une structure dirent représentant l'entrée suivante du flux répertoire pointé par dir. Elle renvoie NULL à la fin du répertoire, ou en cas d'erreur.
+#include <dirent.h>
+		 
+struct dirent {
+    ino_t          d_ino;       /* numéro d'inœud */
+	off_t          d_off;       /* décalage jusqu'à la dirent suivante */
+	unsigned short d_reclen;    /* longueur de cet enregistrement */
+	unsigned char  d_type;      /* type du fichier */
+	char           d_name[256]; /* nom du fichier */
+	};
+
+
+
+Closedir :
+La fonction closedir() ferme le flux de répertoire associé à dir. Après cette invocation, le descripteur dir du flux de répertoire n'est plus disponible.
+#include <sys/types.h>
+#include <dirent.h>
+
+int closedir(DIR *dir);
+
+
+
+Stat/lstat :
+
+Ces fonctions renvoient des informations à propos d'un fichier. Aucune permission n'est nécessaire sur le fichier lui-même, mais vous devez --- dans le cas de stat() et lstat() --- avoir la permission d'exécution (parcours) pour tous les répertoires de path qui mènent au fichier.
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+int stat(const char *path, struct stat *buf);
+int lstat(const char *path, struct stat *buf);
+
+struct stat {
+    dev_t     st_dev;      /* ID du périphérique contenant le fichier */
+	ino_t     st_ino;      /* Numéro inœud */
+	mode_t    st_mode;     /* Protection */
+	nlink_t   st_nlink;    /* Nb liens matériels */
+	uid_t     st_uid;      /* UID propriétaire */
+	gid_t     st_gid;      /* GID propriétaire */
+	dev_t     st_rdev;     /* ID périphérique (si fichier spécial) */
+	off_t     st_size;     /* Taille totale en octets */
+	blksize_t st_blksize;  /* Taille de bloc pour E/S */
+	blkcnt_t  st_blocks;   /* Nombre de blocs alloués */
+	time_t    st_atime;    /* Heure dernier accès */
+	time_t    st_mtime;    /* Heure dernière modification */
+	time_t    st_ctime;    /* Heure dernier changement état */
+	};
+
+
+
+Getpwuid :
+
+La fonction getpwuid() renvoie un pointeur sur une  structure  contenant  les  divers champs de l'enregistrement de /etc/passwd correspondant au à l'ID d'utilisateur uid.
+
+#include <pwd.h>
+#include <sys/types.h>
+
+struct passwd *getpwuid (uid_t uid);
+
+struct passwd {
+    char   *pw_name;   /* Nom d'utilisateur             */
+	char   *pw_passwd; /* Mot de passe                  */
+	uid_t   pw_uid;    /* ID de l'utilisateur           */
+	gid_t   pw_gid;    /* ID du groupe de l'utilisateur */
+	char   *pw_gecos;  /* Nom réel de l'utilisateur     */
+	char   *pw_dir;    /* Répertoire de connexion       */
+	char   *pw_shell;  /* Programme Shell de connexion  */
+	};
+
+renvoi une structure passwd
+
+
+
+
+Getgrgrid :
+
+La fonction getgrgid() renvoie un pointeur vers une structure contenant les champs partiels d'un enregistrement de la base de données groupe pour le groupe correspondant au GID gid
+
+#include <sys/types.h>
+#include <grp.h>
+
+struct group *getgrgid(gid_t gid);
+
+struct group {
+    char   *gr_name;    /* Nom du groupe.          */
+	char   *gr_passwd;  /* Mot de passe du groupe. */
+	gid_t   gr_gid;     /* ID du groupe.           */
+	char  **gr_mem;     /* Membres du groupe.      */
+	};
+
+
+Getcwd :
+
+char *getcwd(char *buf, size_t size);
+
+#include <unistd.h>
+
+La fonction getcwd() copie le chemin d'accès absolu du répertoire de travail courant dans la chaîne pointée par buf, qui est de longueur size.
+Si le chemin du répertoire en cours nécessite un tampon plus long que size octets, la fonction renvoie NULL, et errno contient le code d'erreur ERANGE. Une application doit détecter cette erreur et allouer un tampon plus grand si besoin est.
+
+
+
+Ctime:
+
+Les fonctions ctime(), gmtime() et localtime() prennent toutes un argument de type time_t qui représente une date. Si l'on interprète cet argument comme une valeur absolue, il s'agit du nombre de secondes écoulées depuis le 1er Janvier 1970 à 00h 00m 00s en Temps Universel (TU).
+char *ctime(const time_t *timep);
+#include <time.h>
+
+
+Cette structure tm est définie dans <time.h> comme suit :
+
+struct tm {
+    int tm_sec;         /* secondes           */
+	int tm_min;         /* minutes            */
+	int tm_hour;        /* heures             */
+	int tm_mday;        /* quantième du mois  */
+	int tm_mon;         /* mois (0 à 11 !)    */
+	int tm_year;        /* année              */
+	int tm_wday;        /* jour de la semaine */
+	int tm_yday;        /* jour de l'année    */
+	int tm_isdst;       /* décalage horaire   */
+	};
+
+
+Readlink :
+
+#include <unistd.h>
+readlink() place le contenu du lien symbolique path dans le tampon buf dont la taille est bufsiz. readlink() n'ajoute pas de caractère NUL dans le tampon buf. Il tronquera le contenu (à la longueur bufsiz) si le tampon est trop petit pour recevoir les données.
+
+readlink() renvoie le nombre de caractères placés dans le tampon, ou -1 s'il échoue, auquel cas errno contient le code d'erreur.
+
+
+
+
+Getopt :
+
+#include <unistd.h>
+int getopt(int argc, char * const argv[], const char *optstring);
+La fonction getopt() analyse les arguments de la ligne de commande. Ses éléments argc et argv correspondent aux nombres et à la table d'arguments qui sont transmis à la fonction main() lors du lancement du programme. Un élément de argv qui commence par « - » (et qui ne soit pas uniquement « -- » ou « - ») est considéré comme une option. Les caractères à la suite du « - » initial sont les caractères de l'option. Si getopt() est appelée à plusieurs reprises, elle renverra successivement chaque caractère de chaque option.

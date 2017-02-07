@@ -1,5 +1,26 @@
+#include <dirent.h>
 #include <stdio.h>
 #include "main.h"
+
+
+int ls ()
+{
+	DIR		*d;
+	struct dirent *dir;
+	 	
+	d = opendir(".");
+	if (d)
+		{
+			while((dir = readdir(d)) != NULL)
+				{
+					my_putstr(dir->d_name);
+					my_putstr(" ");
+				}
+			my_putstr("\n");
+			closedir(d);
+		}
+	return 0;
+}
 
 void get_argument(int argc, char *argv[])
 {
@@ -24,7 +45,7 @@ void get_argument(int argc, char *argv[])
 				}
 		}
 	else
-		my_putstr("Argument Invalide\n");
+		ls();
 }
 
 
