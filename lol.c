@@ -40,7 +40,7 @@ int check_folder(t_fold *s_fold)
 				{
 				   	if (dir->d_name[0] != '.')
 					 	lstat(dir->d_name, &file_info);
-					if (S_ISDIR(file_info.st_mode))
+					if (S_ISDIR(file_info.st_mode) == 0)
 						{
 							file_info.st_mode->str;
 							my_putstr("oui");
