@@ -3,6 +3,7 @@ CC =		gcc
 NAME =		my_ls
 
 SRC =			main.c 				\
+				lol.c				\
 				libmy_03/libmy.a
 
 OBJ =		$(SRC:%.c=%.o)
