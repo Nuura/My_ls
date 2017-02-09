@@ -4,16 +4,6 @@
   #include <sys/stat.h>*/
 #include <unistd.h>
 
-
-int get_argument(int argc, char *argv[]);
-void    my_putstr(char *str);
-void    my_put_nbr(int n);
-void my_putchar(char c);
-int check_error(int arg, int i, char **argv, int argc);
-int ls_d(int argc, char **argv, int arg);
-int ls_R (int arg, char **argv);
-int check_folder();
-
 typedef struct s_ls
 {
 	char argu;
@@ -25,6 +15,18 @@ typedef struct s_fold
 {
 	char *str;
 	struct s_fold *next;
-}	t_fold;
+}   t_fold;
+
+int		get_argument(int argc, char *argv[], t_fold *s_fold);
+void    my_putstr(char *str);
+void    my_put_nbr(int n);
+void	my_putchar(char c);
+int		my_strlen(char *str);
+int		check_error(int arg, int i, char **argv, int argc, t_fold *s_fold);
+int		ls_d(int argc, char **argv, int arg);
+int		ls_R (int arg, char **argv, t_fold *s_fold);
+int		check_folder(t_fold *s_fold);
+void tri();
+int is_dir(t_fold *s_fold);
 
 #endif

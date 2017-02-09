@@ -61,10 +61,12 @@ int ls ()
 	return 0;
 }
 
-int ls_R (int arg, char **argv)
+int ls_R (int arg, char **argv, t_fold *s_fold)
 {
 	DIR *d;
+	DIR *L;
 	struct dirent *dir;
+	struct dirent *lol;
 	if (argv[arg][1] == 'R')
 		{
 			d = opendir(".");
@@ -78,32 +80,74 @@ int ls_R (int arg, char **argv)
 									my_putstr(dir->d_name);
 									my_putstr("  ");
 								}
-							/*							if (check_folder() == 0)
-								{
-									struct dirent *c = check_folder();
-									DIR *e;
-									e = opendir(c);
-									if(e != NULL)
-										{
-											my_putstr(".:\n");
-											while ((dir = readdir(e)) != NULL)
-												{
-													if (dir->d_name[0] != '.')
-														{
-															my_putstr(dir->d_name);
-															
-														}
-												}
-										}
-										}*/
-							my_putstr("\n");
 						}
+								
+
+					
+					/*			my_putstr(s_fold->str);
+								my_putstr("\n\n");
+								my_putstr("./");
+								my_putstr(s_fold->str);
+								L = opendir(s_fold->str);
+								if (L != NULL)
+								{
+								my_putstr("\n");
+								while((lol = readdir(L)) != NULL)
+								{
+								my_putstr(lol->d_name);
+								my_putstr("  ");
+								}
+								my_putstr("\n");
+								}*/
+					my_putstr("\n");
+				}
+			if (check_folder(s_fold) == 0)
+				{
+					my_putstr(s_fold->str);                                                                      
+					my_putstr("\n\n");                                                                                              
+                    my_putstr("./");                                                                                        
+                    my_putstr(s_fold->str);                                                                                 
+                    L = opendir(s_fold->str);                                                                               
+                    if (L != NULL)                                                                                          
+                        {                                                                                                   
+                            my_putstr("\n");                                                                                
+                            while((lol = readdir(L)) != NULL)                                                               
+                                {                                                                                           
+                                    my_putstr(lol->d_name);                                                                 
+                                    my_putstr("  ");                                                                        
+                                }                                                                                           
+                            my_putstr("\n");                                                                                 
+						}
+					my_putstr("\n");
 				}
 		}
 	return 0;
 }
 
-int get_argument(int argc, char **argv)
+/*int is_dir(t_fold *s_fold)
+{
+	DIR *L;
+	struct dirent lol;
+	my_putstr(s_fold->str);
+	my_putstr("\n\n");
+	my_putstr("./");
+	my_putstr(s_fold->str);
+	L = opendir(s_fold->str);
+	if (L != NULL)
+		{
+			my_putstr("\n");
+			while((lol = readdir(L)) != NULL)
+				{
+					my_putstr(lol.d_name);
+					my_putstr("  ");
+				}
+			my_putstr("\n");
+		}
+	return 0;
+	}*/
+
+
+int get_argument(int argc, char **argv, t_fold *s_fold)
 {
 	int i;
 	int arg;
@@ -114,7 +158,7 @@ int get_argument(int argc, char **argv)
 		{
 			while (tab[i].argu != '\0' && arg < argc)
 				{
-					check_error(arg, i, argv, argc);
+					check_error(arg, i, argv, argc, s_fold);
 					i++;
 				}
 		}
@@ -126,8 +170,10 @@ int get_argument(int argc, char **argv)
 
 int	main (int argc, char **argv)
 {
+	t_fold s_fold;
 	tabpoint();
-	get_argument(argc, argv);
-	check_folder();
+	check_folder(&s_fold);
+	get_argument(argc, argv, &s_fold);
+
 	return 0;
 }
